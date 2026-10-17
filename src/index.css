@@ -120,3 +120,212 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(180, 83, 9, 0.5);
 }
+
+/* ========================================================= */
+/* Coffee Dripping Drop-by-Drop Animation Keyframes          */
+/* ========================================================= */
+
+@keyframes coffeeDripCycle {
+  0% {
+    transform: translateY(0) scale(0.4);
+    opacity: 0;
+  }
+  12% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0.8;
+  }
+  24% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  38% {
+    transform: translateY(2px) scale(1.05, 1.15);
+    opacity: 1;
+  }
+  48% {
+    transform: translateY(8px) scale(0.9, 1.25);
+    opacity: 1;
+  }
+  53% {
+    transform: translateY(74px) scale(0.8, 1.35);
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(78px) scale(1.4, 0.4);
+    opacity: 0.9;
+  }
+  58% {
+    transform: translateY(78px) scale(1.8, 0.2);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes dropRippleExpand {
+  0%, 52% {
+    transform: scale(0.1);
+    opacity: 0;
+    stroke-width: 2.5;
+  }
+  54% {
+    transform: scale(0.3);
+    opacity: 0.95;
+    stroke-width: 2.2;
+  }
+  68% {
+    transform: scale(1.5);
+    opacity: 0.55;
+    stroke-width: 1.4;
+  }
+  84% {
+    transform: scale(2.6);
+    opacity: 0;
+    stroke-width: 0.5;
+  }
+  100% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+}
+
+@keyframes splashLeft {
+  0%, 53% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  55% {
+    opacity: 0.95;
+    transform: translate(-7px, -11px) scale(1);
+  }
+  62% {
+    opacity: 0.6;
+    transform: translate(-11px, -4px) scale(0.7);
+  }
+  68% {
+    opacity: 0;
+    transform: translate(-13px, 3px) scale(0.3);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes splashRight {
+  0%, 53% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  55% {
+    opacity: 0.95;
+    transform: translate(8px, -13px) scale(1.1);
+  }
+  62% {
+    opacity: 0.6;
+    transform: translate(12px, -5px) scale(0.7);
+  }
+  68% {
+    opacity: 0;
+    transform: translate(14px, 3px) scale(0.3);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes splashCenter {
+  0%, 53% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  55% {
+    opacity: 0.9;
+    transform: translate(0, -9px) scale(1);
+  }
+  62% {
+    opacity: 0.5;
+    transform: translate(0, -3px) scale(0.6);
+  }
+  67% {
+    opacity: 0;
+    transform: translate(0, 2px) scale(0.2);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes beadPulse {
+  0%, 100% {
+    transform: scale(0.85);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.95;
+  }
+}
+
+@keyframes cremaLevelPulse {
+  0%, 52%, 100% {
+    transform: scaleY(1);
+  }
+  55% {
+    transform: scaleY(0.97) translateY(0.8px);
+  }
+  65% {
+    transform: scaleY(1.02) translateY(-0.4px);
+  }
+  75% {
+    transform: scaleY(1);
+  }
+}
+
+.coffee-drop-1 {
+  transform-origin: 120px 42px;
+  animation: coffeeDripCycle 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.coffee-drop-2 {
+  transform-origin: 120px 42px;
+  animation: coffeeDripCycle 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.2s;
+}
+
+.drop-ripple-1 {
+  transform-origin: 120px 126px;
+  animation: dropRippleExpand 2.4s ease-out infinite;
+}
+
+.drop-ripple-2 {
+  transform-origin: 120px 126px;
+  animation: dropRippleExpand 2.4s ease-out infinite 1.2s;
+}
+
+.drop-ripple-3 {
+  transform-origin: 120px 126px;
+  animation: dropRippleExpand 2.4s ease-out infinite 0.6s;
+}
+
+.splash-dot-left {
+  animation: splashLeft 2.4s ease-out infinite;
+}
+
+.splash-dot-right {
+  animation: splashRight 2.4s ease-out infinite;
+}
+
+.splash-dot-center {
+  animation: splashCenter 2.4s ease-out infinite;
+}
+
+.animate-drip-bead {
+  transform-origin: 120px 42px;
+  animation: beadPulse 1.2s ease-in-out infinite;
+}
+
+.animate-crema-pulse {
+  transform-origin: 120px 126px;
+  animation: cremaLevelPulse 1.2s ease-in-out infinite;
+}

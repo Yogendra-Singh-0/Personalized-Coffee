@@ -190,39 +190,44 @@ export const QUIZ_QUESTIONS = [
     dimensionInfluences: ['sweetness', 'spice', 'fruitiness'],
     options: [
       {
-        id: 'brownie',
-        label: 'Fudgy dark chocolate brownie',
-        description: 'Deep cocoa, sea salt flakes, molten center',
-        icon: '🍫',
-        weights: { bitterness: 2, sweetness: 3, creaminess: 2 }
-      },
-      {
-        id: 'cheesecake',
-        label: 'Silky NY cheesecake',
-        description: 'Rich cream, buttery graham cracker crust',
+        id: 'new_york_cheesecake',
+        label: 'New York Cheesecake',
+        price: '₹260',
+        description: 'A timeless New York style cheesecake with a luscious cream cheese filling and a golden buttery crust (Add Nutella / Blueberry / Biscoff +₹60)',
         icon: '🍰',
-        weights: { creaminess: 4, sweetness: 2 }
+        weights: { creaminess: 4, sweetness: 3 }
       },
       {
-        id: 'cinnamon_roll',
-        label: 'Warm glazed cinnamon roll',
-        description: 'Aromatic ceylon cinnamon, warm vanilla glaze',
-        icon: '🥐',
-        weights: { spice: 4, sweetness: 3, creaminess: 2 }
+        id: 'classic_tiramisu',
+        label: 'Classic Tiramisu',
+        price: '₹300',
+        description: 'Layers of espresso-soaked biscuits, silky mascarpone cream, and a generous dusting of rich cocoa for a timeless Italian classic',
+        icon: '☕',
+        weights: { creaminess: 4, bitterness: 2, sweetness: 3 }
       },
       {
-        id: 'lemon_tart',
-        label: 'Zesty lemon meringue tart',
-        description: 'Crisp citrus curd, light torched meringue',
+        id: 'mocha_fudge_cake',
+        label: 'Mocha Fudge Cake',
+        price: '₹300',
+        description: 'Decadent chocolate sponge layered with luscious mocha fudge for a rich and satisfying coffee chocolate indulgence',
+        icon: '🍫',
+        weights: { bitterness: 3, sweetness: 4, creaminess: 2 }
+      },
+      {
+        id: 'almond_tea_cake',
+        label: 'Almond Cake',
+        price: '₹160 (2 pcs)',
+        description: 'Moist chocolate tea cake studded with roasted almonds and baked fresh in-house.',
+        icon: '🌰',
+        weights: { spice: 3, sweetness: 2, creaminess: 2 }
+      },
+      {
+        id: 'lemon_tea_cake',
+        label: 'Lemon Tea Cake',
+        price: '₹160 (2 pcs)',
+        description: 'A soft, buttery tea cake infused with fresh lemon, offering a bright citrus flavour and a light, moist crumb.',
         icon: '🍋',
-        weights: { fruitiness: 5, sweetness: 1 }
-      },
-      {
-        id: 'affogato',
-        label: 'Artisanal vanilla affogato',
-        description: 'Vanilla bean gelato drowned in hot espresso',
-        icon: '🍨',
-        weights: { creaminess: 3, bitterness: 2, sweetness: 3 }
+        weights: { fruitiness: 5, sweetness: 2, creaminess: 1 }
       }
     ]
   },

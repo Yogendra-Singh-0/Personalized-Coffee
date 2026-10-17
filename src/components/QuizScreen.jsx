@@ -106,12 +106,19 @@ export default function QuizScreen({ answers, onAnswer, onBack, onComplete }) {
 
               {/* Text content */}
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="flex items-center justify-between">
-                  <h3 className={`font-heading font-bold text-base ${
-                    isSelected ? 'text-[#9A3412]' : 'text-[#2D1B13]'
-                  }`}>
-                    {opt.label}
-                  </h3>
+                <div className="flex items-center justify-between gap-1">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <h3 className={`font-heading font-bold text-base ${
+                      isSelected ? 'text-[#9A3412]' : 'text-[#2D1B13]'
+                    }`}>
+                      {opt.label}
+                    </h3>
+                    {opt.price && (
+                      <span className="text-[11px] font-bold text-[#92400E] bg-[#FEF3C7] px-2 py-0.5 rounded-full border border-[#FDE68A]">
+                        {opt.price}
+                      </span>
+                    )}
+                  </div>
                   {isSelected && (
                     <div className="w-5 h-5 rounded-full bg-[#C05621] text-white flex items-center justify-center shrink-0 ml-2 animate-scaleIn">
                       <Check className="w-3 h-3 stroke-[3]" />

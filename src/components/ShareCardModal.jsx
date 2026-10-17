@@ -68,10 +68,13 @@ export default function ShareCardModal({ result, onClose }) {
     ctx.font = 'bold 64px "Fredoka", sans-serif';
     ctx.fillText(coffeeName, width / 2, isStory ? 370 : 310);
 
-    // Tagline
+    // Tagline / Menu provenance
     ctx.fillStyle = '#7D6354';
-    ctx.font = 'italic 28px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText(persona.tagline, width / 2, isStory ? 420 : 360);
+    ctx.font = '600 24px "Plus Jakarta Sans", sans-serif';
+    const subText = result.matchedMenuItem
+      ? `${result.matchedMenuItem.categoryName.toUpperCase()} • ${result.matchedMenuItem.price}`
+      : `"${persona.tagline}"`;
+    ctx.fillText(subText, width / 2, isStory ? 420 : 360);
 
     // Draw Cup Graphic in Center
     const cupCenterY = isStory ? 680 : 560;
@@ -346,11 +349,10 @@ export default function ShareCardModal({ result, onClose }) {
               playPop();
               setFormat('1080x1350');
             }}
-            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-              format === '1080x1350'
+            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${format === '1080x1350'
                 ? 'bg-[#78350F] text-white shadow-xs'
                 : 'bg-[#FAF3EB] text-[#78350F] hover:bg-[#F0E4D5]'
-            }`}
+              }`}
           >
             Feed / Post (4:5)
           </button>
@@ -360,11 +362,10 @@ export default function ShareCardModal({ result, onClose }) {
               playPop();
               setFormat('1080x1920');
             }}
-            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-              format === '1080x1920'
+            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${format === '1080x1920'
                 ? 'bg-[#78350F] text-white shadow-xs'
                 : 'bg-[#FAF3EB] text-[#78350F] hover:bg-[#F0E4D5]'
-            }`}
+              }`}
           >
             Stories (9:16)
           </button>
@@ -406,7 +407,7 @@ export default function ShareCardModal({ result, onClose }) {
               onClick={handleTwitter}
               className="py-2.5 px-3 rounded-xl bg-black/5 hover:bg-black/10 text-[#0F1419] font-semibold text-xs border border-black/15 flex items-center justify-center gap-1.5 cursor-pointer transition-all"
             >
-              <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
               <span>Post to X</span>
             </button>
 

@@ -1,9 +1,11 @@
 // Pure logic recommendation engine driven by JSON configuration
 // Aligned with PRD Section 7: Recommendation Logic & Quality Rules
+// Integrated with authentic in-house physical Café Menu
 
 import { INGREDIENTS_CATALOG } from '../data/ingredientsData';
 import { PERSONAS } from '../data/personasData';
 import { QUIZ_QUESTIONS } from '../data/quizQuestions';
+import { CAFE_MENU_ITEMS, matchDrinkFromMenu } from '../data/cafeMenuData';
 
 // Compatibility matrix to prevent unpalatable clashing combinations (PRD 7.4)
 const INCOMPATIBLE_PAIRS = [
@@ -182,46 +184,97 @@ export function recommendIngredients(profile, persona) {
   return result;
 }
 
+// Convert Menu Item cup design to standard ingredients structure for LayeredCupGraphic
+function createIngredientsFromMenuItem(menuItem) {
+  const cd = menuItem.cupDesign || {};
+  return {
+    base: {
+      id: `${menuItem.id}_base`,
+      name: cd.baseName || menuItem.name,
+      measure: menuItem.category === 'matcha_bar' ? '60 ml whisked' : menuItem.temp === 'Iced' ? '90 ml chilled' : '60 ml double shot',
+      visualColor: cd.baseColor || '#382216',
+      vector: menuItem.vector
+    },
+    milk: {
+      id: `${menuItem.id}_milk`,
+      name: cd.milkName || 'Steamed Milk',
+      measure: cd.milkColor === 'transparent' ? 'None (Clean Pour)' : '140 ml microfoam',
+      visualColor: cd.milkColor || '#F3EBD8',
+      vector: menuItem.vector
+    },
+    sweetener: {
+      id: `${menuItem.id}_sweet`,
+      name: cd.flavourName || 'Natural Balance',
+      measure: 'Carefully Balanced',
+      visualColor: '#D97706',
+      vector: menuItem.vector
+    },
+    flavour: {
+      id: `${menuItem.id}_flavour`,
+      name: cd.flavourName || 'In-House Extraction',
+      measure: 'House Infusion',
+      visualColor: cd.toppingColor || '#A0522D',
+      vector: menuItem.vector
+    },
+    topping: {
+      id: `${menuItem.id}_topping`,
+      name: cd.toppingName || 'Artisanal Finish',
+      measure: 'Barista Garnish',
+      visualColor: cd.toppingColor || '#B85D32',
+      vector: menuItem.vector
+    }
+  };
+}
+
 // Generate the complete recipe and persona reveal object (PRD 6.4)
 export function generateCoffeeReveal({ userName, answers, dietaryFilters = {}, customIngredients = null }) {
   const profile = calculateTasteProfile(answers, dietaryFilters);
   const persona = assignPersona(profile.vector);
-  const ingredients = customIngredients || recommendIngredients(profile, persona);
 
-  // Dynamic Coffee Name
+  // 1. Match authentic drink from the physical Café Menu
+  const matchedMenuItem = matchDrinkFromMenu(
+    persona.id,
+    profile.vector,
+    profile.constraints,
+    profile.temperature
+  );
+
+  // 2. Ingredients setup
+  const ingredients = customIngredients || createIngredientsFromMenuItem(matchedMenuItem);
+
+  // 3. Dynamic Coffee Title
   const cleanName = (userName && userName.trim()) ? userName.trim() : '';
-  let coffeeName = persona.defaultName;
+  const coffeeName = cleanName ? `${cleanName}'s ${matchedMenuItem.name}` : matchedMenuItem.name;
 
-  if (cleanName) {
-    coffeeName = persona.nameTemplates[0].replace('{name}', cleanName);
-  } else {
-    coffeeName = persona.defaultName;
-  }
-
-  // Visual meter data (Section 6.4: sweetness, bitterness, creaminess, strength, fruitiness/warmth)
+  // 4. Calibrate Flavour Profile Breakdown (1-10)
   const flavourProfile = {
-    sweetness: Math.min(10, Math.max(1, Math.round((profile.vector.sweetness + ingredients.sweetener.vector.sweetness) / 1.7))),
-    bitterness: Math.min(10, Math.max(1, Math.round((profile.vector.bitterness + ingredients.base.vector.bitterness) / 1.8))),
-    creaminess: Math.min(10, Math.max(1, Math.round((profile.vector.creaminess + ingredients.milk.vector.creaminess) / 1.7))),
-    spice: Math.min(10, Math.max(1, Math.round((profile.vector.spice + ingredients.flavour.vector.spice) / 1.7))),
-    caffeine: Math.min(10, Math.max(1, Math.round((profile.vector.caffeine + ingredients.base.vector.caffeine) / 1.7)))
+    sweetness: Math.min(10, Math.max(1, Math.round(matchedMenuItem.vector.sweetness))),
+    bitterness: Math.min(10, Math.max(1, Math.round(matchedMenuItem.vector.bitterness))),
+    creaminess: Math.min(10, Math.max(1, Math.round(matchedMenuItem.vector.creaminess))),
+    spice: Math.min(10, Math.max(1, Math.round(matchedMenuItem.vector.spice))),
+    caffeine: Math.min(10, Math.max(1, Math.round(matchedMenuItem.vector.caffeine)))
   };
 
-  const steps = persona.homeBrewTemplate(profile.equipment, ingredients);
-  const cafeScript = persona.cafeOrderScript(ingredients);
+  const steps = matchedMenuItem.homeSteps || persona.homeBrewTemplate(profile.equipment, ingredients);
+  const cafeScript = matchedMenuItem.cafeScript || persona.cafeOrderScript(ingredients);
   const personaStory = persona.storyFormula(answers);
+
+  const isIcedDrink = matchedMenuItem.temp.toLowerCase().includes('iced') && !matchedMenuItem.temp.toLowerCase().includes('hot')
+    ? true
+    : profile.temperature === 'iced';
 
   return {
     id: `brew_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
     userName: cleanName,
     coffeeName,
+    matchedMenuItem,
     persona,
     ingredients,
     flavourProfile,
     recipe: {
-      servingTemp: profile.temperature === 'iced' ? 'Chilled (3°C / 37°F)' : 'Steaming Hot (65°C / 150°F)',
+      servingTemp: isIcedDrink ? 'Chilled over ice (3°C)' : 'Steaming Hot (65°C / 150°F)',
       prepTime: '3-4 mins',
-      difficulty: 'Easy Barista Craft',
+      difficulty: 'Barista Craft',
       steps,
       cafeScript
     },
@@ -231,30 +284,72 @@ export function generateCoffeeReveal({ userName, answers, dietaryFilters = {}, c
   };
 }
 
-// "Try a variation" handler (PRD 6.6)
-export function applyVariation(currentReveal, variationType) {
+// User selects any drink from the full menu browser
+export function selectMenuItemForReveal(currentReveal, menuItem) {
   const updated = JSON.parse(JSON.stringify(currentReveal));
+  const cleanName = currentReveal.userName || '';
+
+  updated.matchedMenuItem = menuItem;
+  updated.coffeeName = cleanName ? `${cleanName}'s ${menuItem.name}` : menuItem.name;
+  updated.ingredients = createIngredientsFromMenuItem(menuItem);
+
+  const isIcedDrink = menuItem.temp.toLowerCase().includes('iced') && !menuItem.temp.toLowerCase().includes('hot');
+
+  updated.recipe = {
+    ...updated.recipe,
+    servingTemp: isIcedDrink ? 'Chilled over ice (3°C)' : 'Steaming Hot (65°C)',
+    steps: menuItem.homeSteps || updated.recipe.steps,
+    cafeScript: menuItem.cafeScript || updated.recipe.cafeScript
+  };
+
+  updated.flavourProfile = {
+    sweetness: Math.min(10, Math.max(1, menuItem.vector.sweetness)),
+    bitterness: Math.min(10, Math.max(1, menuItem.vector.bitterness)),
+    creaminess: Math.min(10, Math.max(1, menuItem.vector.creaminess)),
+    spice: Math.min(10, Math.max(1, menuItem.vector.spice)),
+    caffeine: Math.min(10, Math.max(1, menuItem.vector.caffeine))
+  };
+
+  return updated;
+}
+
+// "Try a variation" handler mapped to menu drinks (PRD 6.6)
+export function applyVariation(currentReveal, variationType) {
+  const cleanName = currentReveal.userName || '';
+  let targetMenuId = null;
 
   if (variationType === 'spicier') {
-    updated.ingredients.flavour = INGREDIENTS_CATALOG.flavour.find(f => f.id === 'cardamom_crush') || updated.ingredients.flavour;
-    updated.ingredients.topping = INGREDIENTS_CATALOG.topping.find(t => t.id === 'cinnamon_dust') || updated.ingredients.topping;
-    updated.flavourProfile.spice = Math.min(10, updated.flavourProfile.spice + 3);
-    updated.coffeeName = updated.coffeeName.includes('Spiced') ? updated.coffeeName : `Spiced ${updated.coffeeName}`;
+    targetMenuId = currentReveal.matchedMenuItem?.id === 'rose_cardamom_latte' ? 'guava_heatwave' : 'rose_cardamom_latte';
   } else if (variationType === 'sweeter') {
-    updated.ingredients.sweetener = INGREDIENTS_CATALOG.sweetener.find(s => s.id === 'madagascar_vanilla') || updated.ingredients.sweetener;
-    updated.flavourProfile.sweetener = Math.min(10, updated.flavourProfile.sweetness + 3);
-    updated.coffeeName = updated.coffeeName.includes('Sweet') ? updated.coffeeName : `Sweet ${updated.coffeeName}`;
+    targetMenuId = currentReveal.matchedMenuItem?.id === 'cloudy_caramel_latte' ? 'tiramisu_cortado' : 'cloudy_caramel_latte';
   } else if (variationType === 'iced') {
-    updated.ingredients.base = INGREDIENTS_CATALOG.base.find(b => b.id === 'cold_brew') || updated.ingredients.base;
-    updated.ingredients.topping = INGREDIENTS_CATALOG.topping.find(t => t.id === 'vanilla_cold_foam') || updated.ingredients.topping;
-    updated.recipe.servingTemp = 'Chilled over ice (3°C)';
-    updated.coffeeName = updated.coffeeName.includes('Iced') ? updated.coffeeName : `Iced ${updated.coffeeName}`;
+    targetMenuId = currentReveal.matchedMenuItem?.id === 'bourbon_whiskey' ? 'coconut_iced_coffee' : 'bourbon_whiskey';
   } else if (variationType === 'turbo') {
-    updated.ingredients.base = INGREDIENTS_CATALOG.base.find(b => b.id === 'espresso_double') || updated.ingredients.base;
+    targetMenuId = currentReveal.matchedMenuItem?.id === 'dirty_matcha' ? 'espresso_martini' : 'dirty_matcha';
+  } else if (variationType === 'decaf') {
+    targetMenuId = 'americano_classic';
+  }
+
+  const foundItem = CAFE_MENU_ITEMS.find(m => m.id === targetMenuId);
+  if (foundItem) {
+    return selectMenuItemForReveal(currentReveal, foundItem);
+  }
+
+  // Fallback to ingredient tweaking
+  const updated = JSON.parse(JSON.stringify(currentReveal));
+  if (variationType === 'spicier') {
+    updated.flavourProfile.spice = Math.min(10, updated.flavourProfile.spice + 3);
+    updated.coffeeName = `Spiced ${updated.coffeeName}`;
+  } else if (variationType === 'sweeter') {
+    updated.flavourProfile.sweetness = Math.min(10, updated.flavourProfile.sweetness + 3);
+    updated.coffeeName = `Sweet ${updated.coffeeName}`;
+  } else if (variationType === 'iced') {
+    updated.recipe.servingTemp = 'Chilled over ice (3°C)';
+    updated.coffeeName = `Iced ${updated.coffeeName}`;
+  } else if (variationType === 'turbo') {
     updated.flavourProfile.caffeine = 10;
     updated.coffeeName = `Turbo ${updated.coffeeName}`;
   } else if (variationType === 'decaf') {
-    updated.ingredients.base = INGREDIENTS_CATALOG.base.find(b => b.id === 'decaf_espresso') || updated.ingredients.base;
     updated.flavourProfile.caffeine = 1;
     updated.coffeeName = `Mellow Decaf ${updated.coffeeName}`;
   }

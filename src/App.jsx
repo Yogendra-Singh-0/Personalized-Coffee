@@ -89,7 +89,7 @@ export default function App() {
       const updated = { ...prev, [questionId]: optionId };
       try {
         sessionStorage.setItem('brewyou_answers', JSON.stringify(updated));
-      } catch (e) {}
+      } catch (e) { }
       return updated;
     });
   };
@@ -98,7 +98,7 @@ export default function App() {
     setUserName(name);
     try {
       sessionStorage.setItem('brewyou_name', name);
-    } catch (e) {}
+    } catch (e) { }
   };
 
   // Transition from Quiz to Ingredient Suggestion
@@ -165,7 +165,7 @@ export default function App() {
 
       const newUrl = `${window.location.pathname}?${params.toString()}`;
       window.history.replaceState({}, '', newUrl);
-    } catch (e) {}
+    } catch (e) { }
   };
 
   // Variations Handler (PRD Section 6.6)
@@ -183,7 +183,7 @@ export default function App() {
     try {
       sessionStorage.removeItem('brewyou_answers');
       window.history.replaceState({}, '', window.location.pathname);
-    } catch (e) {}
+    } catch (e) { }
     setScreen('landing');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -245,7 +245,7 @@ export default function App() {
       {/* Footer */}
       <footer className="w-full py-6 text-center text-xs text-[#A89082] border-t border-[#EFE5D8]">
         <div className="max-w-xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>☕ Brew You — Personalised Coffee Game</span>
+          <span>☕ Brew You — Personalized Coffee Persona</span>
           <span className="text-[11px] text-[#A89082]">
             Crafted for curious home brewers & café lovers
           </span>

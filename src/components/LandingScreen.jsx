@@ -1,16 +1,9 @@
 import React from 'react';
 import { ArrowRight, Sparkles, Clock, ShieldCheck, Coffee } from 'lucide-react';
-import LayeredCupGraphic from './LayeredCupGraphic';
+import CoffeeDrippingMug from './CoffeeDrippingMug';
 import { playPop } from '../utils/soundEffects';
 
 export default function LandingScreen({ userName, setUserName, onStartQuiz }) {
-  const sampleIngredients = {
-    base: { name: 'Double Espresso', visualColor: '#382216', id: 'espresso' },
-    milk: { name: 'Barista Oat Milk', visualColor: '#F3EBD8', id: 'oat' },
-    flavour: { name: 'Ceylon Cinnamon', visualColor: '#9C4A26', id: 'cinnamon' },
-    topping: { name: 'Cinnamon Dust', visualColor: '#B85D32', id: 'dust' }
-  };
-
   const handleStart = (e) => {
     e.preventDefault();
     playPop();
@@ -22,7 +15,7 @@ export default function LandingScreen({ userName, setUserName, onStartQuiz }) {
       {/* Eyebrow Pill */}
       <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F5EBE1] border border-[#E8D5C4] text-[#8C4A27] text-xs font-semibold mb-2.5 tracking-wide shadow-xs">
         <Sparkles className="w-3.5 h-3.5 text-[#C05621]" />
-        <span>Personalised Coffee Game</span>
+        <span>Make My Coffee</span>
       </div>
 
       {/* Main Headline (PRD Section 5: Hook line) */}
@@ -34,12 +27,9 @@ export default function LandingScreen({ userName, setUserName, onStartQuiz }) {
         Answer 10 playful questions about your morning mood and taste cravings. We'll brew your custom persona card and a real recipe to make or order today.
       </p>
 
-      {/* Animated Hero Coffee Illustration */}
+      {/* Animated Hero Coffee Illustration: Dripping Drop by Drop into Mug */}
       <div className="my-1 relative">
-        <div className="absolute inset-0 bg-radial from-[#F5DEB3]/40 to-transparent rounded-full filter blur-xl transform scale-110 pointer-events-none"></div>
-        <div className="relative animate-float">
-          <LayeredCupGraphic ingredients={sampleIngredients} size="compact" />
-        </div>
+        <CoffeeDrippingMug />
       </div>
 
       {/* Interactive Form: Optional Name + Primary CTA */}
