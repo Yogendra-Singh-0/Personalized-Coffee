@@ -7,17 +7,64 @@ export const CAFE_CATEGORIES = [
   { id: 'protein_menu', name: 'Protein Menu', icon: '💪', subtitle: 'Powered by Only What\'s Needed' },
   { id: 'matcha_bar', name: 'Matcha Bar', icon: '🍵', subtitle: 'Ceremonial Japanese Uji Matcha' },
   { id: 'manual_brew', name: 'Manual Brew', icon: '⚗️', subtitle: 'Fruity to Intense Extraction' },
-  { id: 'specialty_teas', name: 'Specialty Teas', icon: '🫖', subtitle: 'Classic & Herbal Tisanes' },
-  { id: 'desserts', name: 'Desserts & Tea Cakes', icon: '🍰', subtitle: 'Freshly Baked In-House' }
+  { id: 'specialty_teas', name: 'Specialty Teas', icon: '🫖', subtitle: 'Classic & Herbal Tisanes' }
 ];
 
 export const ESPRESSO_CUSTOMIZATIONS = [
-  { id: 'single_origin', name: 'Single-Origin Coffee', price: 30, text: '+₹30' },
-  { id: 'decaf', name: 'Decaf Espresso', price: 50, text: '+₹50' },
-  { id: 'extra_shot', name: 'Extra Espresso Shot (20ml)', price: 50, text: '+₹50' },
-  { id: 'alt_milk', name: 'Alternative Milk (Oat / Coconut / Almond)', price: 80, text: '+₹80' },
-  { id: 'protein_addon', name: 'Add On Protein 20g (Only What\'s Needed)', price: 120, text: '+₹120 (79 kcal)' },
-  { id: 'syrups', name: 'Add On Syrups (Vanilla / Caramel / Jaggery / Hazelnut / Choc)', price: 40, text: '+₹40' }
+  {
+    id: 'single_origin',
+    name: 'Single-Origin Coffee',
+    title: 'Single-Origin Beans',
+    subtitle: 'Specialty single-estate roast',
+    scriptPhrase: 'single-origin beans',
+    price: 30,
+    text: '+₹30'
+  },
+  {
+    id: 'decaf',
+    name: 'Decaf Espresso',
+    title: 'Decaf Espresso',
+    subtitle: 'Swiss Water (caffeine-free)',
+    scriptPhrase: 'decaf',
+    price: 50,
+    text: '+₹50'
+  },
+  {
+    id: 'extra_shot',
+    name: 'Extra Espresso Shot (20ml)',
+    title: 'Extra Espresso Shot',
+    subtitle: '+20ml rich espresso pull',
+    scriptPhrase: 'an extra shot',
+    price: 50,
+    text: '+₹50'
+  },
+  {
+    id: 'alt_milk',
+    name: 'Alternative Milk (Oat / Coconut / Almond)',
+    title: 'Plant-Based Milk',
+    subtitle: 'Oat, Coconut, or Almond',
+    scriptPhrase: 'oat milk',
+    price: 80,
+    text: '+₹80'
+  },
+  {
+    id: 'protein_addon',
+    name: 'Add On Protein 20g (Only What\'s Needed)',
+    title: 'Protein Boost (20g)',
+    subtitle: 'Clean plant protein (79 kcal)',
+    scriptPhrase: 'a 20g protein boost',
+    price: 120,
+    text: '+₹120'
+  },
+  {
+    id: 'syrups',
+    name: 'Add On Syrups (Vanilla / Caramel / Jaggery / Hazelnut / Choc)',
+    title: 'Artisan Syrups',
+    subtitle: 'Vanilla, Caramel, Hazelnut, Choc',
+    scriptPhrase: 'vanilla syrup',
+    price: 40,
+    text: '+₹40'
+  }
 ];
 
 export const MANUAL_BREW_METHODS = [
@@ -1031,165 +1078,11 @@ export const CAFE_MENU_ITEMS = [
     ],
     cafeScript: '“Hi! Could I please get an Earl Grey black tea, hot, with a slice of lemon?”'
   },
-
-  // ==========================================
-  // DESSERTS & TEA CAKES (Physical Menu)
-  // ==========================================
-  {
-    id: 'menu_ny_cheesecake',
-    name: 'New York Cheesecake',
-    category: 'desserts',
-    categoryName: 'Desserts',
-    price: '\u20b9260',
-    priceNum: 260,
-    temp: 'Room Temp',
-    defaultTemp: 'hot',
-    dietary: [],
-    description: 'A timeless New York style cheesecake with a luscious cream cheese filling and a golden buttery crust. Add-on: Nutella / Blueberry / Biscoff +\u20b960',
-    vector: { sweetness: 8, bitterness: 1, creaminess: 9, fruitiness: 2, spice: 1, caffeine: 1, adventurousness: 3 },
-    personas: ['sweet_explorer', 'cosy_dreamer'],
-    cupDesign: {
-      baseColor: '#F4EDDC',
-      milkColor: '#FAF5EE',
-      toppingColor: '#DAA520',
-      baseName: 'Golden Buttery Biscuit Crust',
-      milkName: 'Luscious Cream Cheese Filling',
-      flavourName: 'Vanilla Bean & Lemon Zest',
-      toppingName: 'Nutella / Blueberry / Biscoff Add-on'
-    },
-    homeSteps: [
-      { step: 1, text: 'Allow the cheesecake to come to room temperature for 15 minutes before serving.' },
-      { step: 2, text: 'Slice cleanly with a warm knife for a pristine presentation.' },
-      { step: 3, text: 'Optionally drizzle warm Nutella, blueberry compote, or crushed Biscoff on top.' },
-      { step: 4, text: 'Pair with a flat white or cortado for the perfect cafe experience.' }
-    ],
-    cafeScript: '"Hi! Could I please get a slice of the New York Cheesecake with a Blueberry topping?"'
-  },
-  {
-    id: 'menu_classic_tiramisu',
-    name: 'Classic Tiramisu',
-    category: 'desserts',
-    categoryName: 'Desserts',
-    price: '\u20b9300',
-    priceNum: 300,
-    temp: 'Chilled',
-    defaultTemp: 'iced',
-    dietary: [],
-    description: 'Layers of espresso-soaked biscuits, silky mascarpone cream, and a generous dusting of rich cocoa for a timeless Italian classic.',
-    vector: { sweetness: 7, bitterness: 4, creaminess: 9, fruitiness: 1, spice: 2, caffeine: 5, adventurousness: 5 },
-    personas: ['cosy_dreamer', 'zen_artisan', 'midnight_alchemist'],
-    cupDesign: {
-      baseColor: '#2E1608',
-      milkColor: '#FDFAF5',
-      toppingColor: '#4A2311',
-      baseName: 'Espresso-Soaked Savoiardi Biscuits',
-      milkName: 'Silky Mascarpone Cream',
-      flavourName: 'Dark Espresso & Cocoa',
-      toppingName: 'Generous Dutch Cocoa Dusting'
-    },
-    homeSteps: [
-      { step: 1, text: 'Brew a strong double espresso and let it cool to room temperature.' },
-      { step: 2, text: 'Quickly dip ladyfinger biscuits in espresso and layer in a serving dish.' },
-      { step: 3, text: 'Whip mascarpone with egg yolks and sugar until velvety, then layer over biscuits.' },
-      { step: 4, text: 'Refrigerate 4 hours then finish with a heavy dusting of fine cocoa powder.' }
-    ],
-    cafeScript: '"Hi! Could I please get the Classic Tiramisu?"'
-  },
-  {
-    id: 'menu_mocha_fudge_cake',
-    name: 'Mocha Fudge Cake',
-    category: 'desserts',
-    categoryName: 'Desserts',
-    price: '\u20b9300',
-    priceNum: 300,
-    temp: 'Room Temp',
-    defaultTemp: 'hot',
-    dietary: [],
-    description: 'Decadent chocolate sponge layered with luscious mocha fudge for a rich and satisfying coffee chocolate indulgence.',
-    vector: { sweetness: 8, bitterness: 5, creaminess: 7, fruitiness: 1, spice: 2, caffeine: 6, adventurousness: 4 },
-    personas: ['sweet_explorer', 'midnight_alchemist', 'bold_achiever'],
-    cupDesign: {
-      baseColor: '#1A0A04',
-      milkColor: '#3E1E0E',
-      toppingColor: '#7B3F00',
-      baseName: 'Dark Chocolate Sponge Layers',
-      milkName: 'Mocha Fudge Filling',
-      flavourName: 'Espresso & Belgian Cocoa',
-      toppingName: 'Glossy Chocolate Ganache'
-    },
-    homeSteps: [
-      { step: 1, text: 'Mix dark cocoa, flour, sugar, and a double shot of cooled espresso for the sponge.' },
-      { step: 2, text: 'Bake at 175\u00b0C for 30 minutes then cool completely.' },
-      { step: 3, text: 'Melt dark chocolate with butter and cream then stir in espresso for mocha fudge.' },
-      { step: 4, text: 'Layer and frost generously, then refrigerate for an hour before slicing.' }
-    ],
-    cafeScript: '"Hi! Could I please get a slice of the Mocha Fudge Cake?"'
-  },
-  {
-    id: 'menu_almond_cake',
-    name: 'Almond Cake',
-    category: 'desserts',
-    categoryName: 'Tea Cakes',
-    price: '\u20b9160 (2 pcs)',
-    priceNum: 160,
-    temp: 'Room Temp',
-    defaultTemp: 'hot',
-    dietary: ['nut'],
-    description: 'Moist chocolate tea cake studded with roasted almonds and baked fresh in-house.',
-    vector: { sweetness: 6, bitterness: 3, creaminess: 5, fruitiness: 1, spice: 3, caffeine: 2, adventurousness: 3 },
-    personas: ['zen_artisan', 'cosy_dreamer'],
-    cupDesign: {
-      baseColor: '#5C2E12',
-      milkColor: '#C8A882',
-      toppingColor: '#8B4513',
-      baseName: 'Chocolate Tea Cake Batter',
-      milkName: 'Light Moist Crumb',
-      flavourName: 'Roasted Whole Almonds',
-      toppingName: 'Toasted Almond Flake Crown'
-    },
-    homeSteps: [
-      { step: 1, text: 'Fold crushed roasted almonds into a buttery chocolate muffin batter.' },
-      { step: 2, text: 'Spoon into lined cake tins and crown with whole almonds.' },
-      { step: 3, text: 'Bake at 170\u00b0C for 20 minutes until a skewer comes out clean.' },
-      { step: 4, text: 'Enjoy warm alongside a flat white or cortado.' }
-    ],
-    cafeScript: '"Hi! Could I please get 2 pieces of the Almond Cake?"'
-  },
-  {
-    id: 'menu_lemon_tea_cake',
-    name: 'Lemon Tea Cake',
-    category: 'desserts',
-    categoryName: 'Tea Cakes',
-    price: '\u20b9160 (2 pcs)',
-    priceNum: 160,
-    temp: 'Room Temp',
-    defaultTemp: 'hot',
-    dietary: ['vegan'],
-    description: 'A soft, buttery tea cake infused with fresh lemon, offering a bright citrus flavour and a light, moist crumb.',
-    vector: { sweetness: 6, bitterness: 1, creaminess: 4, fruitiness: 8, spice: 2, caffeine: 1, adventurousness: 4 },
-    personas: ['sunlit_optimist', 'minimalist_purist', 'wild_pioneer'],
-    cupDesign: {
-      baseColor: '#E8D44D',
-      milkColor: '#FFFDE7',
-      toppingColor: '#FFC107',
-      baseName: 'Lemon-Zested Buttery Batter',
-      milkName: 'Soft Moist Crumb',
-      flavourName: 'Fresh Sicilian Lemon Juice & Zest',
-      toppingName: 'Thin Lemon Sugar Glaze'
-    },
-    homeSteps: [
-      { step: 1, text: 'Cream butter and sugar until pale, then fold in flour, lemon zest, and fresh lemon juice.' },
-      { step: 2, text: 'Pour into small loaf or muffin tins lined with baking paper.' },
-      { step: 3, text: 'Bake at 170\u00b0C for 18\u201322 minutes until golden and springy to touch.' },
-      { step: 4, text: 'Drizzle with a thin lemon sugar glaze while still warm for a glossy citrus finish.' }
-    ],
-    cafeScript: '"Hi! Could I please get 2 pieces of the Lemon Tea Cake?"'
-  }
 ];
 
 // Helper to find drink by persona and constraints
 export function matchDrinkFromMenu(personaId, vector, constraints = {}, preferredTemp = 'flexible') {
-  let candidates = [...CAFE_MENU_ITEMS];
+  let candidates = CAFE_MENU_ITEMS.filter(item => item.category !== 'desserts' && !item.name.toLowerCase().includes('cake'));
 
   // 1. Dietary filters
   if (constraints.vegan) {

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 518 518" width="518" height="518" fill="none" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&amp;family=Plus+Jakarta+Sans:wght@500;600&amp;display=swap');
+      .siolim-serif {
+        font-family: 'Playfair Display', 'Cormorant Garamond', 'Didot', 'Bodoni MT', 'Georgia', serif;
+        font-size: 82px;
+        font-weight: 700;
+        fill: #1D3A7A;
+        letter-spacing: 0.5px;
+      }
+      .siolim-sans {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 25px;
+        font-weight: 600;
+        fill: #1D3A7A;
+        letter-spacing: 3px;
+      }
+      .brand-stroke {
+        stroke: #1D3A7A;
+      }
+    </style>
+  </defs>
+
+  <!-- Crisp Background Circle -->
+  <circle cx="259" cy="259" r="248" fill="#FFFFFF" class="brand-stroke" stroke-width="18" />
+
+  <!-- Outer Capsule (Stadium) -->
+  <rect x="170" y="58" width="178" height="248" rx="89" fill="none" class="brand-stroke" stroke-width="5" />
+
+  <!-- Inner Capsule (Stadium) -->
+  <rect x="178" y="66" width="162" height="232" rx="81" fill="none" class="brand-stroke" stroke-width="3.5" />
+
+  <!-- Central Stem Line extending down past the capsule base -->
+  <line x1="259" y1="66" x2="259" y2="308" class="brand-stroke" stroke-width="3.5" stroke-linecap="round" />
+
+  <!-- Veins / Herringbone ribs inside inner capsule -->
+  <g class="brand-stroke" stroke-width="3" stroke-linecap="round">
+    <!-- Apex center-top veins -->
+    <path d="M259 78 L237 96 M259 78 L281 96" />
+    <path d="M259 93 L222 112 M259 93 L296 112" />
+    <path d="M259 108 L208 129 M259 108 L310 129" />
+    <path d="M259 123 L196 147 M259 123 L322 147" />
+    <path d="M259 138 L189 165 M259 138 L329 165" />
+    <path d="M259 153 L183 182 M259 153 L335 182" />
+    <path d="M259 168 L180 199 M259 168 L338 199" />
+    <path d="M259 183 L180 216 M259 183 L338 216" />
+    <path d="M259 198 L180 233 M259 198 L338 233" />
+    <path d="M259 213 L183 250 M259 213 L335 250" />
+    <path d="M259 228 L190 267 M259 228 L328 267" />
+    <path d="M259 243 L202 281 M259 243 L316 281" />
+    <path d="M259 258 L222 292 M259 258 L296 292" />
+  </g>
+
+  <!-- Wordmark "siolim" -->
+  <text x="259" y="394" text-anchor="middle" class="siolim-serif">siolim</text>
+
+  <!-- Tagline "seraphic experiences" -->
+  <text x="259" y="427" text-anchor="middle" class="siolim-sans">seraphic experiences</text>
+</svg>

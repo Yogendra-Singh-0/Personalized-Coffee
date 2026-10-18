@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { X as CloseIcon, Download, Share2, Copy, Check, MessageCircle } from 'lucide-react';
 import { playPop, playClink } from '../utils/soundEffects';
+import { Tilt3D } from './ScrollReveal3D';
 
 export default function ShareCardModal({ result, onClose }) {
   const canvasRef = useRef(null);
+  const logoImageRef = useRef(null);
   const [format, setFormat] = useState('1080x1350'); // '1080x1350' (feed) or '1080x1920' (stories)
   const [copiedLink, setCopiedLink] = useState(false);
   const [imageBlobUrl, setImageBlobUrl] = useState(null);
@@ -11,7 +13,7 @@ export default function ShareCardModal({ result, onClose }) {
   const { coffeeName, persona, ingredients, flavourProfile, userName } = result;
 
   // Draw Card on Canvas
-  const drawCard = () => {
+  const drawCard = (loadedLogoImg = logoImageRef.current) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -36,19 +38,40 @@ export default function ShareCardModal({ result, onClose }) {
     ctx.lineWidth = 14;
     ctx.strokeRect(36, 36, width - 72, height - 72);
 
-    // Top Header: "Brew you." Logo
-    ctx.fillStyle = '#78350F';
-    ctx.font = 'bold 52px "Fredoka", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Brew you.', width / 2, isStory ? 140 : 110);
+    // Top Header: "siolim." Logo
+    const headerY = isStory ? 140 : 110;
+    const logoImg = loadedLogoImg || logoImageRef.current;
+    if (logoImg && logoImg.complete && logoImg.naturalWidth > 0) {
+      const logoSize = 70;
+      ctx.font = 'bold 52px "Roboto", sans-serif';
+      const text = 'siolim.';
+      const textMetrics = ctx.measureText(text);
+      const gap = 16;
+      const totalWidth = logoSize + gap + textMetrics.width;
+      const startX = (width - totalWidth) / 2;
 
+      // Draw siolim-logo.svg directly on canvas
+      ctx.drawImage(logoImg, startX, headerY - 14 - logoSize / 2, logoSize, logoSize);
+
+      // Draw brand text
+      ctx.fillStyle = '#78350F';
+      ctx.textAlign = 'left';
+      ctx.fillText(text, startX + logoSize + gap, headerY);
+    } else {
+      ctx.fillStyle = '#78350F';
+      ctx.font = 'bold 52px "Roboto", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('siolim.', width / 2, headerY);
+    }
+
+    ctx.textAlign = 'center';
     ctx.fillStyle = '#A89082';
-    ctx.font = '500 24px "Plus Jakarta Sans", sans-serif';
+    ctx.font = '500 24px "Roboto", sans-serif';
     ctx.fillText('PERSONALIZED COFFEE PERSONA', width / 2, isStory ? 180 : 150);
 
     // Persona Pill Badge
     const badgeText = persona.badge.toUpperCase();
-    ctx.font = 'bold 28px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 28px "Roboto", sans-serif';
     const badgeWidth = ctx.measureText(badgeText).width + 60;
     const badgeY = isStory ? 240 : 200;
 
@@ -65,12 +88,12 @@ export default function ShareCardModal({ result, onClose }) {
 
     // Coffee Title
     ctx.fillStyle = '#2B1810';
-    ctx.font = 'bold 64px "Fredoka", sans-serif';
+    ctx.font = 'bold 64px "Roboto", sans-serif';
     ctx.fillText(coffeeName, width / 2, isStory ? 370 : 310);
 
     // Tagline / Menu provenance
     ctx.fillStyle = '#7D6354';
-    ctx.font = '600 24px "Plus Jakarta Sans", sans-serif';
+    ctx.font = '600 24px "Roboto", sans-serif';
     const subText = result.matchedMenuItem
       ? `${result.matchedMenuItem.categoryName.toUpperCase()} • ${result.matchedMenuItem.price}`
       : `"${persona.tagline}"`;
@@ -163,7 +186,7 @@ export default function ShareCardModal({ result, onClose }) {
 
     // Meters Header
     ctx.fillStyle = '#78350F';
-    ctx.font = 'bold 28px "Fredoka", sans-serif';
+    ctx.font = 'bold 28px "Roboto", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('Flavour Profile Breakdown', 120, meterStartY + 45);
 
@@ -182,7 +205,7 @@ export default function ShareCardModal({ result, onClose }) {
       const y = meterStartY + 95 + row * 48;
 
       ctx.fillStyle = '#5C381E';
-      ctx.font = '600 20px "Plus Jakarta Sans", sans-serif';
+      ctx.font = '600 20px "Roboto", sans-serif';
       ctx.fillText(d.label, x, y);
 
       // Track bar
@@ -200,7 +223,7 @@ export default function ShareCardModal({ result, onClose }) {
 
       // Score
       ctx.fillStyle = '#78350F';
-      ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+      ctx.font = 'bold 18px "Roboto", sans-serif';
       ctx.fillText(`${d.val}/10`, x + 355, y);
     });
 
@@ -216,7 +239,7 @@ export default function ShareCardModal({ result, onClose }) {
       ctx.stroke();
 
       ctx.fillStyle = '#78350F';
-      ctx.font = 'bold 30px "Fredoka", sans-serif';
+      ctx.font = 'bold 30px "Roboto", sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText('Signature Recipe Ingredients', 120, ingStartY + 50);
 
@@ -231,11 +254,11 @@ export default function ShareCardModal({ result, onClose }) {
       items.forEach((item, i) => {
         const y = ingStartY + 105 + i * 44;
         ctx.fillStyle = '#C05621';
-        ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
+        ctx.font = 'bold 20px "Roboto", sans-serif';
         ctx.fillText(`• ${item.cat}:`, 120, y);
 
         ctx.fillStyle = '#2B1810';
-        ctx.font = '500 20px "Plus Jakarta Sans", sans-serif';
+        ctx.font = '500 20px "Roboto", sans-serif';
         ctx.fillText(item.val, 250, y);
       });
     }
@@ -244,12 +267,12 @@ export default function ShareCardModal({ result, onClose }) {
     const footerY = isStory ? 1790 : 1210;
     ctx.textAlign = 'center';
     ctx.fillStyle = '#2B1810';
-    ctx.font = 'bold 34px "Fredoka", sans-serif';
+    ctx.font = 'bold 34px "Roboto", sans-serif';
     ctx.fillText("What's your coffee, really?", width / 2, footerY);
 
     ctx.fillStyle = '#C05621';
-    ctx.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('Take the 2-minute quiz at brewyou.coffee', width / 2, footerY + 45);
+    ctx.font = 'bold 24px "Roboto", sans-serif';
+    ctx.fillText('Take the 2-minute quiz with Siolim', width / 2, footerY + 45);
 
     // Convert canvas to Blob URL for easy downloading
     canvas.toBlob((blob) => {
@@ -260,7 +283,19 @@ export default function ShareCardModal({ result, onClose }) {
   };
 
   useEffect(() => {
-    drawCard();
+    const img = new Image();
+    img.src = '/siolim-logo.svg';
+    img.onload = () => {
+      logoImageRef.current = img;
+      drawCard(img);
+    };
+    if (img.complete && img.naturalWidth > 0) {
+      logoImageRef.current = img;
+    }
+  }, []);
+
+  useEffect(() => {
+    drawCard(logoImageRef.current);
   }, [format]);
 
   // Action: Download Image
@@ -269,7 +304,7 @@ export default function ShareCardModal({ result, onClose }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const link = document.createElement('a');
-    link.download = `BrewYou_${persona.id}_${coffeeName.replace(/\s+/g, '_')}.png`;
+    link.download = `Siolim_${persona.id}_${coffeeName.replace(/\s+/g, '_')}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
   };
@@ -280,7 +315,7 @@ export default function ShareCardModal({ result, onClose }) {
     const shareUrl = window.location.href;
     const shareData = {
       title: `My Coffee Persona: ${coffeeName}`,
-      text: `I just brewed my custom coffee on Brew You: ${coffeeName} (${persona.badge})! Take the 2-minute quiz to find yours:`,
+      text: `I just brewed my custom coffee on Siolim: ${coffeeName} (${persona.badge})! Take the 2-minute quiz to find yours:`,
       url: shareUrl
     };
 
@@ -306,21 +341,21 @@ export default function ShareCardModal({ result, onClose }) {
   // Action: WhatsApp Direct
   const handleWhatsApp = () => {
     playPop();
-    const text = encodeURIComponent(`I got "${coffeeName}" (${persona.badge}) on Brew You! ☕ Discover what your coffee really is: ${window.location.href}`);
+    const text = encodeURIComponent(`I got "${coffeeName}" (${persona.badge}) on Siolim! ☕ Discover what your coffee really is: ${window.location.href}`);
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
 
   // Action: Twitter / X Direct
   const handleTwitter = () => {
     playPop();
-    const text = encodeURIComponent(`My coffee persona is "${coffeeName}" (${persona.badge})! ☕ What's your coffee, really?`);
+    const text = encodeURIComponent(`My coffee persona is "${coffeeName}" (${persona.badge}) on Siolim! ☕ What's your coffee, really?`);
     const url = encodeURIComponent(window.location.href);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-fadeIn overflow-y-auto">
-      <div className="bg-[#FFFDF9] border border-[#E8D5C4] rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative text-left my-auto">
+      <div className="bg-[#FFFDF9] border border-[#E8D5C4] rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative text-left my-auto animate-pop-3d">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-[#F0E4D5]">
           <div>
@@ -334,7 +369,7 @@ export default function ShareCardModal({ result, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-[#F3E8DF] text-[#78350F] transition-colors cursor-pointer"
+            className="p-1.5 rounded-full hover:bg-[#F3E8DF] text-[#78350F] transition-colors cursor-pointer card-3d"
           >
             <CloseIcon className="w-5 h-5" />
           </button>
@@ -349,7 +384,7 @@ export default function ShareCardModal({ result, onClose }) {
               playPop();
               setFormat('1080x1350');
             }}
-            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${format === '1080x1350'
+            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer card-3d ${format === '1080x1350'
                 ? 'bg-[#78350F] text-white shadow-xs'
                 : 'bg-[#FAF3EB] text-[#78350F] hover:bg-[#F0E4D5]'
               }`}
@@ -362,7 +397,7 @@ export default function ShareCardModal({ result, onClose }) {
               playPop();
               setFormat('1080x1920');
             }}
-            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${format === '1080x1920'
+            className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer card-3d ${format === '1080x1920'
                 ? 'bg-[#78350F] text-white shadow-xs'
                 : 'bg-[#FAF3EB] text-[#78350F] hover:bg-[#F0E4D5]'
               }`}
@@ -371,21 +406,23 @@ export default function ShareCardModal({ result, onClose }) {
           </button>
         </div>
 
-        {/* Interactive Canvas Preview */}
-        <div className="w-full bg-[#EFE4D6] rounded-2xl p-2 flex items-center justify-center overflow-hidden max-h-[360px] border border-[#DAC8B6]">
-          <canvas
-            ref={canvasRef}
-            className="rounded-xl shadow-lg max-h-[340px] w-auto h-auto object-contain"
-          />
-        </div>
+        {/* Interactive Canvas Preview with 3D Tilt */}
+        <Tilt3D maxTilt={9} scale={1.02} glare={true} className="w-full">
+          <div className="w-full bg-[#EFE4D6] rounded-2xl p-2 flex items-center justify-center overflow-hidden max-h-[360px] border border-[#DAC8B6] shadow-md card-3d cursor-grab active:cursor-grabbing">
+            <canvas
+              ref={canvasRef}
+              className="rounded-xl shadow-lg max-h-[340px] w-auto h-auto object-contain"
+            />
+          </div>
+        </Tilt3D>
 
         {/* Action Buttons */}
         <div className="mt-4 space-y-2.5">
-          {/* Primary: Download PNG */}
+          {/* Primary: Download PNG with 3D Press */}
           <button
             type="button"
             onClick={handleDownload}
-            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#78350F] to-[#B45309] hover:from-[#5C270A] hover:to-[#92400E] text-white font-heading font-bold text-sm shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all"
+            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#78350F] to-[#B45309] hover:from-[#5C270A] hover:to-[#92400E] text-white font-heading font-bold text-sm shadow-md btn-3d flex items-center justify-center gap-2 cursor-pointer transition-all"
           >
             <Download className="w-4 h-4" />
             <span>Download High-Res Card (PNG)</span>
@@ -396,7 +433,7 @@ export default function ShareCardModal({ result, onClose }) {
             <button
               type="button"
               onClick={handleWhatsApp}
-              className="py-2.5 px-3 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] font-semibold text-xs border border-[#25D366]/30 flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+              className="py-2.5 px-3 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#128C7E] font-semibold text-xs border border-[#25D366]/30 flex items-center justify-center gap-1.5 cursor-pointer transition-all card-3d"
             >
               <MessageCircle className="w-4 h-4" />
               <span>WhatsApp</span>
@@ -405,7 +442,7 @@ export default function ShareCardModal({ result, onClose }) {
             <button
               type="button"
               onClick={handleTwitter}
-              className="py-2.5 px-3 rounded-xl bg-black/5 hover:bg-black/10 text-[#0F1419] font-semibold text-xs border border-black/15 flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+              className="py-2.5 px-3 rounded-xl bg-black/5 hover:bg-black/10 text-[#0F1419] font-semibold text-xs border border-black/15 flex items-center justify-center gap-1.5 cursor-pointer transition-all card-3d"
             >
               <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
               <span>Post to X</span>
@@ -414,7 +451,7 @@ export default function ShareCardModal({ result, onClose }) {
             <button
               type="button"
               onClick={handleCopyLink}
-              className="py-2.5 px-3 rounded-xl bg-[#FAF3EB] hover:bg-[#F0E4D5] text-[#78350F] font-semibold text-xs border border-[#E5D2BC] flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+              className="py-2.5 px-3 rounded-xl bg-[#FAF3EB] hover:bg-[#F0E4D5] text-[#78350F] font-semibold text-xs border border-[#E5D2BC] flex items-center justify-center gap-1.5 cursor-pointer transition-all card-3d"
             >
               {copiedLink ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
               <span>{copiedLink ? 'Copied!' : 'Copy Link'}</span>

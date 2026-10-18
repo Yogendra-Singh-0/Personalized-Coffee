@@ -70,8 +70,8 @@ export default function App() {
 
     // 2. Otherwise restore from sessionStorage (PRD Section 6.2)
     try {
-      const savedAnswers = sessionStorage.getItem('brewyou_answers');
-      const savedName = sessionStorage.getItem('brewyou_name');
+      const savedAnswers = sessionStorage.getItem('siolim_answers') || sessionStorage.getItem('brewyou_answers');
+      const savedName = sessionStorage.getItem('siolim_name') || sessionStorage.getItem('brewyou_name');
       if (savedAnswers) {
         setAnswers(JSON.parse(savedAnswers));
       }
@@ -88,7 +88,7 @@ export default function App() {
     setAnswers((prev) => {
       const updated = { ...prev, [questionId]: optionId };
       try {
-        sessionStorage.setItem('brewyou_answers', JSON.stringify(updated));
+        sessionStorage.setItem('siolim_answers', JSON.stringify(updated));
       } catch (e) { }
       return updated;
     });
@@ -97,7 +97,7 @@ export default function App() {
   const handleUpdateName = (name) => {
     setUserName(name);
     try {
-      sessionStorage.setItem('brewyou_name', name);
+      sessionStorage.setItem('siolim_name', name);
     } catch (e) { }
   };
 
@@ -181,6 +181,7 @@ export default function App() {
     setCustomIngredients(null);
     setRevealData(null);
     try {
+      sessionStorage.removeItem('siolim_answers');
       sessionStorage.removeItem('brewyou_answers');
       window.history.replaceState({}, '', window.location.pathname);
     } catch (e) { }
@@ -189,10 +190,10 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#2D1B13]">
+    <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#2D1B13] w-full max-w-full overflow-x-hidden">
       <Navbar onReset={handleReset} showReset={screen !== 'landing'} />
 
-      <main className="flex-1 flex flex-col justify-start">
+      <main className="flex-1 flex flex-col justify-start w-full max-w-full overflow-x-hidden">
         {screen === 'landing' && (
           <LandingScreen
             userName={userName}
@@ -245,7 +246,15 @@ export default function App() {
       {/* Footer */}
       <footer className="w-full py-6 text-center text-xs text-[#A89082] border-t border-[#EFE5D8]">
         <div className="max-w-xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>☕ Brew You — Personalized Coffee Persona</span>
+          <div className="flex items-center gap-2">
+            <img
+              src="/siolim-logo.svg"
+              alt="Siolim Logo"
+              className="w-6 h-6 object-contain"
+            />
+            <span className="font-semibold text-[#78350F]">siolim<span className="text-[#C05621]">.</span></span>
+            <span>— Personalized Coffee Persona</span>
+          </div>
           <span className="text-[11px] text-[#A89082]">
             Crafted for curious home brewers & café lovers
           </span>

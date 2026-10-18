@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Volume2, VolumeX, RotateCcw, Info, Coffee, X } from 'lucide-react';
+import { Volume2, VolumeX, RotateCcw, Info, X } from 'lucide-react';
 import { isAudioEnabled, setAudioEnabled, playPop } from '../utils/soundEffects';
 
 export default function Navbar({ onReset, showReset = false }) {
@@ -25,22 +25,24 @@ export default function Navbar({ onReset, showReset = false }) {
 
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[#FAF6F0]/85 border-b border-[#EFE5D8]/80 transition-all">
-      <div className="max-w-xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div className="max-w-xl mx-auto px-3 sm:px-4 h-14 flex items-center justify-between w-full">
         {/* Brand Logo */}
         <div
           onClick={showReset ? onReset : undefined}
-          className={`flex items-center gap-2 select-none ${showReset ? 'cursor-pointer hover:opacity-80' : ''}`}
+          className={`flex items-center gap-2 select-none shrink-0 ${showReset ? 'cursor-pointer hover:opacity-85' : ''}`}
         >
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#78350F] to-[#B45309] flex items-center justify-center text-white shadow-sm shadow-[#78350F]/20">
-            <Coffee className="w-4 h-4 stroke-[2.5]" />
-          </div>
-          <span className="font-heading font-bold text-xl tracking-tight text-[#3E2114]">
-            Brew you<span className="text-[#C05621]">.</span>
+          <img
+            src="/siolim-logo.svg"
+            alt="Siolim Logo"
+            className="w-9 h-9 sm:w-10 sm:h-10 object-contain drop-shadow-xs shrink-0"
+          />
+          <span className="font-heading font-bold text-lg sm:text-xl tracking-tight text-[#3E2114]">
+            siolim<span className="text-[#C05621]">.</span>
           </span>
         </div>
 
         {/* Right utility buttons */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
           {/* Sound Toggle */}
           <button
             type="button"
@@ -63,9 +65,9 @@ export default function Navbar({ onReset, showReset = false }) {
           <button
             type="button"
             onClick={handleOpenInfo}
-            aria-label="About Brew You"
+            aria-label="About Siolim"
             className="p-2 rounded-xl text-[#78350F] hover:bg-[#F3E8DF] transition-colors cursor-pointer"
-            title="About Brew You"
+            title="About Siolim"
           >
             <Info className="w-4 h-4" />
           </button>
@@ -104,13 +106,17 @@ export default function Navbar({ onReset, showReset = false }) {
               <X className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center gap-2 mb-3 pr-6">
-              <span className="text-2xl">☕</span>
-              <h3 className="font-heading font-bold text-lg text-[#3E2114]">About Brew You</h3>
+            <div className="flex items-center gap-2.5 mb-3 pr-6">
+              <img
+                src="/siolim-logo.svg"
+                alt="Siolim Logo"
+                className="w-9 h-9 object-contain"
+              />
+              <h3 className="font-heading font-bold text-lg text-[#3E2114]">About Siolim</h3>
             </div>
 
             <p className="text-xs sm:text-sm text-[#6C5346] leading-relaxed mb-3">
-              Most people drink the same coffee out of habit. <strong>Brew You</strong> is a playful discovery game that pairs your mood, personality, and taste cues to a bespoke coffee persona and reproducible barista recipe.
+              Most people drink the same coffee out of habit. <strong>Siolim</strong> is a playful discovery game that pairs your mood, personality, and taste cues to a bespoke coffee persona and reproducible barista recipe.
             </p>
 
             <div className="bg-[#FAF4EC] rounded-xl p-3 text-xs text-[#78350F] mb-4 space-y-1.5 border border-[#EADBCE]">

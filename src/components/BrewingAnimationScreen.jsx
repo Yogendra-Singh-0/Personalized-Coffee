@@ -65,11 +65,9 @@ export default function BrewingAnimationScreen({ userName, ingredients, isIced, 
       </div>
 
       {/* Animated Visual Cup with Filling Effect */}
-      <div className="my-8 relative">
-        <div className="w-56 h-56 rounded-full bg-radial from-[#FEEBC8]/60 to-transparent absolute -inset-2 animate-glow filter blur-md -z-10"></div>
-        <div className="animate-float">
-          <LayeredCupGraphic ingredients={ingredients} isIced={isIced} size="large" />
-        </div>
+      <div className="my-4 relative flex items-center justify-center w-full overflow-visible">
+        <div className="w-56 h-56 rounded-full bg-radial from-[#FEEBC8]/60 to-transparent absolute inset-0 m-auto filter blur-lg -z-10 pointer-events-none"></div>
+        <LayeredCupGraphic ingredients={ingredients} isIced={isIced} size="large" />
       </div>
 
       {/* Stage Status & Micro-step */}
